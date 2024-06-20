@@ -20,7 +20,7 @@
     </div>
     <div class="navbar navbar-dark bg-dark shadow-sm">
       <div class="container">
-        <a href="#" class="navbar-brand d-flex align-items-center">
+        <RouterLink to="/" class="navbar-brand d-flex align-items-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="20"
@@ -39,8 +39,11 @@
             />
             <circle cx="12" cy="13" r="4" />
           </svg>
-          <strong>Album</strong>
-        </a>
+          <strong>Gallery</strong>
+        </RouterLink>
+        <RouterLink to="/cart" class="cart btn">
+          <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+        </RouterLink>
         <button
           class="navbar-toggler"
           type="button"
@@ -67,4 +70,9 @@ const logout = () => {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style scoped>
+header .navbar .cart {
+  margin-left: auto;
+  color: #fff;
+}
+</style>

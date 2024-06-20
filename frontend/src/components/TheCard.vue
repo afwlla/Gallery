@@ -9,7 +9,9 @@
 
       <div class="d-flex justify-content-between align-items-center">
         <div class="btn-group">
-          <button type="button" class="btn btn-primary">Buy</button>
+          <button @click="addToCart(item.id)" type="button" class="btn btn-primary">
+            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+          </button>
         </div>
         <small class="price text-muted">\ {{ lib.getNumberFormatted(item.price) }}</small>
         <small class="real">
@@ -23,11 +25,22 @@
 <script setup>
 import { toRefs } from 'vue'
 import lib from '@/scripts/lib'
+import axios from 'axios'
 
 const props = defineProps({
   item: Object
 })
 const { item } = toRefs(props)
+
+const addToCart = (itemId) => {
+  axios.post(`/api/cart/items/${itemId}`).then(() => {
+    console.log('ok')
+  })
+}
+
+axios.get('/api/cart/items').then(({ data }) => {
+  console.log(data)
+})
 </script>
 
 <style scoped>
