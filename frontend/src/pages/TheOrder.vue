@@ -42,11 +42,11 @@
               <div class="row g-3">
                 <div class="col-12">
                   <label for="username" class="form-label">이름</label>
-                  <input type="text" class="form-control" id="username" />
+                  <input type="text" class="form-control" id="username" v-model="form.name" />
                 </div>
                 <div class="col-12">
                   <label for="address" class="form-label">주소</label>
-                  <input type="text" class="form-control" id="address" />
+                  <input type="text" class="form-control" id="address" v-model="form.address" />
                 </div>
               </div>
               <hr class="my-4" />
@@ -59,6 +59,7 @@
                     type="radio"
                     class="form-check-input"
                     value="card"
+                    v-model="form.payment"
                   />
                   <label class="form-check-label" for="card">신용카드 </label>
                 </div>
@@ -69,14 +70,15 @@
                     type="radio"
                     class="form-check-input"
                     value="bank"
+                    v-model="form.payment"
                   />
                   <label class="form-check-label" for="bank">무통장입금</label>
                 </div>
               </div>
               <label for="cc-name" class="form-label">카드 번호</label>
-              <input type="text" class="form-control" id="cc-name" />
+              <input type="text" class="form-control" id="cc-name" v-model="form.cardNumber" />
               <hr class="my-4" />
-              <button class="w-100 btn btn-primary btn-lg">결제하기</button>
+              <button class="w-100 btn btn-primary btn-lg" @click="submit()">결제하기</button>
             </div>
           </div>
         </div>
@@ -90,13 +92,31 @@ import { computed, ref } from 'vue'
 import axios from 'axios'
 import lib from '@/scripts/lib'
 
+const form = ref({
+  name: '',
+  address: '',
+  payment: '',
+  cardNumber: '',
+  items: ''
+})
 const items = ref([])
+
 const load = async () =>
   await axios.get('/api/cart/items').then(({ data }) => {
     console.log(data)
     items.value = data
   })
 load()
+
+const submit = async () => {
+  const args = JSON.parse(JSON.stringify(form.value))
+  args.items = JSON.stringify(items.value)
+
+  await axios.post('/api/orders', args).then(() => {
+    console.log('submit ok')
+    console.log(args)
+  })
+}
 
 const computedPrice = computed(() => {
   let result = 0

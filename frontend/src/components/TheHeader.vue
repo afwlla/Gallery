@@ -7,6 +7,9 @@
             <h4 class="text-white">사이트맵</h4>
             <ul class="list-unstyled">
               <li><RouterLink to="/" class="text-white">Main</RouterLink></li>
+              <li v-if="store.state.account.id">
+                <RouterLink to="/orders" class="text-white">Order List</RouterLink>
+              </li>
               <li>
                 <RouterLink v-if="!store.state.account.id" to="/login" class="text-white"
                   >Login</RouterLink
