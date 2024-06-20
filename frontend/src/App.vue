@@ -2,10 +2,26 @@
 import Header from '@/components/TheHeader.vue'
 import Footer from '@/components/TheFooter.vue'
 import store from './scripts/store'
-const id = sessionStorage.getItem('id')
-if (id) {
-  store.commit('setAccount', id)
+import axios from 'axios'
+import { useRoute } from 'vue-router'
+import { watch } from 'vue'
+
+const check = () => {
+  axios.get('/api/account/check').then(({ data }) => {
+    console.log(data)
+    if (data) {
+      store.commit('setAccount', data)
+    } else {
+      store.commit('setAccount', 0)
+    }
+  })
 }
+
+const route = useRoute()
+
+watch(route, () => {
+  check()
+})
 </script>
 
 <template>
