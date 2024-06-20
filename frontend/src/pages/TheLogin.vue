@@ -32,19 +32,28 @@
 </template>
 
 <script setup>
+import store from '@/scripts/store'
 import axios from 'axios'
 import { ref } from 'vue'
-
+import router from '@/scripts/router'
 const form = ref({
   email: '',
   password: ''
 })
 
 const submit = () => {
-  axios.post('/api/account/login', form.value).then((res) => {
-    console.log(res)
-    window.alert('login success')
-  })
+  axios
+    .post('/api/account/login', form.value)
+    .then((res) => {
+      store.commit('setAccount', res.data)
+      sessionStorage.setItem('id', res.data)
+      router.push({ path: '/' })
+      console.log(res)
+      window.alert('login success')
+    })
+    .catch(() => {
+      window.alert('login failed')
+    })
 }
 </script>
 
