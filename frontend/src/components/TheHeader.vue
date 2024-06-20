@@ -44,7 +44,7 @@
           </svg>
           <strong>Gallery</strong>
         </RouterLink>
-        <RouterLink to="/cart" class="cart btn">
+        <RouterLink v-if="store.state.account.id" to="/cart" class="cart btn">
           <i class="fa fa-shopping-cart" aria-hidden="true"></i>
         </RouterLink>
         <button
@@ -66,14 +66,21 @@
 <script setup>
 import store from '@/scripts/store'
 import router from '@/scripts/router'
-const logout = () => {
-  store.commit('setAccount', 0)
-  sessionStorage.removeItem('id')
-  router.push({ path: '/' })
+import axios from 'axios'
+
+const logout = async () => {
+  await axios.post('/api/account/logout').then(() => {
+    store.commit('setAccount', 0)
+    router.push({ path: '/' })
+  })
 }
 </script>
 
 <style scoped>
+header ul li a {
+  cursor: pointer;
+}
+
 header .navbar .cart {
   margin-left: auto;
   color: #fff;

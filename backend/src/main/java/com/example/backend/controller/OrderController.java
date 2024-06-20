@@ -12,6 +12,8 @@ import com.example.backend.repository.ItemRepository;
 import com.example.backend.repository.OrderRepository;
 import com.example.backend.service.JwtService;
 
+import jakarta.transaction.Transactional;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,11 +45,12 @@ public class OrderController {
         throw new ResponseStatusException(HttpStatus.UNAUTHORIZED);
     }
 
-    // int memberId = jwtService.getId(token);
-    // List<Order> orders = orderRepository.findByMemberIdOrderByIdDesc(memberId);
-    List<Order> orders = orderRepository.findAll();
+    int memberId = jwtService.getId(token);
+    List<Order> orders = orderRepository.findByMemberIdOrderByIdDesc(memberId);
     return new ResponseEntity<>(orders, HttpStatus.OK);
   }
+
+  @Transactional
   @PostMapping("/api/orders")
   public ResponseEntity pushOrder(@RequestBody OrderDto dto, @CookieValue(value = "token", required = false) String token) {
     if (!jwtService.isValid(token)) {
@@ -65,7 +68,7 @@ public class OrderController {
     newOrder.setItems(dto.getItems());
 
     orderRepository.save(newOrder);
-    // cartRepository.deleteByMemberId(memberId);
+    cartRepository.deleteByMemberId(memberId);
 
     return new ResponseEntity<>(HttpStatus.OK);
   }

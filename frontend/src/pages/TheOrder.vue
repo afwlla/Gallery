@@ -91,6 +91,7 @@
 import { computed, ref } from 'vue'
 import axios from 'axios'
 import lib from '@/scripts/lib'
+import router from '@/scripts/router'
 
 const form = ref({
   name: '',
@@ -113,8 +114,8 @@ const submit = async () => {
   args.items = JSON.stringify(items.value)
 
   await axios.post('/api/orders', args).then(() => {
-    console.log('submit ok')
-    console.log(args)
+    alert('Order Completed')
+    router.push({ path: '/orders' })
   })
 }
 
